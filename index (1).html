@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RakshaNet — Decentralized Trust Mesh | IDBI Innovate 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0E17;
+  --panel:#111827;
+  --panel-2:#161F30;
+  --line:#232D42;
+  --cyan:#2FD3C7;
+  --cyan-dim:#1A5C55;
+  --amber:#FFB020;
+  --red:#FF4B5C;
+  --ink:#E8ECF4;
+  --slate:#8A93A6;
+  --white:#FFFFFF;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  min-height:100vh;
+}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.display{font-family:'Space Grotesk',sans-serif;}
+
+.shell{max-width:1180px;margin:0 auto;padding:28px 28px 60px;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:14px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand .mark{
+  width:38px;height:38px;border-radius:10px;
+  background:conic-gradient(from 180deg, var(--cyan), var(--cyan-dim), var(--cyan));
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.brand .mark::after{content:"";position:absolute;inset:3px;border-radius:8px;background:var(--bg);}
+.brand .mark .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);z-index:2;}
+.brand h1{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;margin:0;color:var(--white);letter-spacing:-0.01em;}
+.brand .sub{font-size:11.5px;color:var(--slate);margin-top:1px;}
+.pill{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--cyan);background:rgba(47,211,199,0.1);border:1px solid var(--cyan-dim);
+  padding:6px 12px;border-radius:20px;
+}
+.tagline{color:var(--slate);font-size:14px;margin:2px 0 22px;max-width:640px;line-height:1.5;}
+
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:22px;flex-wrap:wrap;}
+.tab{
+  padding:11px 18px;font-size:13.5px;font-weight:600;color:var(--slate);cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .15s;
+}
+.tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+.tab:hover:not(.active){color:var(--ink);}
+
+.view{display:none;}
+.view.active{display:block;}
+
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
+@media (max-width:860px){.grid2{grid-template-columns:1fr;}}
+
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;
+}
+.card h3{font-family:'Space Grotesk',sans-serif;font-size:15px;margin:0 0 4px;color:var(--white);}
+.card .desc{font-size:12px;color:var(--slate);margin-bottom:14px;line-height:1.5;}
+
+.scenario-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
+  padding:14px 18px;margin-bottom:18px;
+}
+.scenario-bar .label{font-size:12.5px;color:var(--slate);}
+.scenario-bar .title{font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--white);margin-top:2px;}
+.btn{
+  background:var(--cyan);color:#052824;border:none;border-radius:9px;
+  padding:11px 20px;font-weight:700;font-size:13px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  transition:transform .1s;
+}
+.btn:hover{transform:translateY(-1px);}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
+
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:10px 0 4px;}
+.gauge-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:6px;}
+.gauge-score{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;margin-top:-64px;}
+.gauge-status{font-size:12px;font-weight:600;margin-top:2px;padding:4px 12px;border-radius:20px;}
+
+.timeline{margin-top:6px;max-height:280px;overflow-y:auto;padding-right:4px;}
+.event{
+  display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);
+  animation:slideIn .35s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.event .t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--slate);min-width:56px;padding-top:1px;}
+.event .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.event .txt{font-size:12.5px;line-height:1.4;color:var(--ink);}
+.event .txt b{color:var(--white);}
+
+.intervention{
+  margin-top:16px;background:linear-gradient(145deg, rgba(255,75,92,0.12), rgba(255,176,32,0.08));
+  border:1px solid var(--red);border-radius:14px;padding:18px;display:none;
+}
+.intervention.show{display:block;animation:slideIn .4s ease;}
+.intervention .ihead{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.intervention .ihead .ico{width:26px;height:26px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:14px;}
+.intervention h4{margin:0;color:var(--white);font-family:'Space Grotesk',sans-serif;font-size:15px;}
+.intervention p{font-size:12.5px;color:var(--ink);line-height:1.55;margin:0 0 12px;}
+.intervention .actions{display:flex;gap:10px;}
+
+.mesh-svg-wrap{display:flex;justify-content:center;padding:10px 0 6px;}
+.mesh-result{
+  margin-top:14px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
+  padding:16px;display:none;
+}
+.mesh-result.show{display:block;animation:slideIn .4s ease;}
+.mesh-result .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:12px;}
+.mesh-result .row:last-child{border-bottom:none;}
+.mesh-result .row span:first-child{color:var(--slate);}
+.mesh-result .row span:last-child{color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:11px;}
+
+.invoice-card{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;
+}
+.invoice-card .row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;}
+.invoice-card .row span:first-child{color:var(--slate);}
+.invoice-card .row span:last-child{color:var(--ink);font-family:'IBM Plex Mono',monospace;}
+
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em;text-transform:uppercase;}
+.badge.safe{background:rgba(47,211,199,0.15);color:var(--cyan);}
+.badge.warn{background:rgba(255,176,32,0.15);color:var(--amber);}
+.badge.danger{background:rgba(255,75,92,0.15);color:var(--red);}
+
+.footer-note{margin-top:26px;font-size:11px;color:var(--slate);text-align:center;line-height:1.6;}
+.footer-note b{color:var(--ink);}
+
+.timeline::-webkit-scrollbar{width:5px;}
+.timeline::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <div class="mark"><div class="dot"></div></div>
+      <div>
+        <h1>RakshaNet</h1>
+        <div class="sub">Decentralized Trust Mesh for Banking</div>
+      </div>
+    </div>
+    <div class="pill">IDBI Innovate 2026 · Wildcard Track 05</div>
+  </header>
+  <p class="tagline">A privacy-preserving fraud-intelligence mesh + continuous behavioural trust engine — built to stop fraud <b style="color:var(--ink)">while it's happening</b>, across banks, without any bank ever sharing raw customer data.</p>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="session">Live Session Monitor</div>
+    <div class="tab" data-tab="mesh">Cross-Bank Fraud Mesh</div>
+    <div class="tab" data-tab="trade">Trade Finance Shield</div>
+  </div>
+
+  <div class="view active" id="view-session">
+    <div class="scenario-bar">
+      <div>
+        <div class="label">SCENARIO</div>
+        <div class="title">Suspected "digital arrest" coercion — live transfer attempt</div>
+      </div>
+      <button class="btn" id="startBtn" onclick="runSessionSim()">▶ Run Simulation</button>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Session Event Timeline</h3>
+        <div class="desc">Real signals from an active app session, correlated as they arrive — not reviewed after the fact.</div>
+        <div class="timeline" id="timeline"></div>
+        <div class="intervention" id="intervention">
+          <div class="ihead"><div class="ico">!</div><h4>Adaptive Response Triggered</h4></div>
+          <p>This pattern — a long unknown call, a brand-new payee, and an urgent large transfer — matches known <b>digital arrest / coercion scam</b> signatures. RakshaNet doesn't block the transaction outright: it holds it for a 2-minute cool-off, places a callback from a verified IDBI number, and shows the customer a plain-language warning before they can confirm.</p>
+          <div class="actions">
+            <button class="btn" onclick="resetSession()">Restart Demo</button>
+            <button class="btn ghost" onclick="resetSession()">View as: Customer confirmed safe → released</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Live Trust Score</h3>
+        <div class="desc">Recomputed continuously through the session — not just once at login.</div>
+        <div class="gauge-wrap">
+          <svg width="220" height="140" viewBox="0 0 220 140">
+            <path d="M 20 120 A 90 90 0 0 1 200 120" fill="none" stroke="#232D42" stroke-width="16" stroke-linecap="round"/>
+            <path id="gaugeArc" d="M 20 120 A 90 90 0 0 1 200 120" fill="none" stroke="#2FD3C7" stroke-width="16" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="0"/>
+          </svg>
+          <div class="gauge-score mono" id="gaugeScore" style="color:var(--cyan);">92</div>
+          <div class="gauge-status" id="gaugeStatus" style="background:rgba(47,211,199,0.15);color:var(--cyan);">NORMAL</div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--slate);line-height:1.6;">
+          <div>→ Device &amp; geo match: <span class="mono" style="color:var(--ink);">baseline</span></div>
+          <div>→ Call context: <span class="mono" id="sigCall" style="color:var(--ink);">none</span></div>
+          <div>→ Payee history: <span class="mono" id="sigPayee" style="color:var(--ink);">known payees only</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="view-mesh">
+    <div class="scenario-bar">
+      <div>
+        <div class="label">SCENARIO</div>
+        <div class="title">New account opened at IDBI — checking the mesh before onboarding completes</div>
+      </div>
+      <button class="btn" id="meshBtn" onclick="runMeshSim()">▶ Query Mesh</button>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Consortium Ledger Query</h3>
+        <div class="desc">IDBI never sees the other bank's customer data — only a hashed match/no-match signal.</div>
+        <div class="mesh-svg-wrap">
+          <svg width="420" height="220" viewBox="0 0 420 220" id="meshSvg">
+            <circle cx="210" cy="110" r="34" fill="#161F30" stroke="#2FD3C7" stroke-width="2"/>
+            <text x="210" y="106" text-anchor="middle" fill="#2FD3C7" font-size="9" font-family="IBM Plex Mono" font-weight="600">CONSORTIUM</text>
+            <text x="210" y="118" text-anchor="middle" fill="#2FD3C7" font-size="9" font-family="IBM Plex Mono" font-weight="600">LEDGER</text>
+
+            <circle cx="60" cy="40" r="26" fill="#161F30" stroke="#8A93A6" stroke-width="1.5"/>
+            <text x="60" y="44" text-anchor="middle" fill="#E8ECF4" font-size="9" font-family="IBM Plex Mono">IDBI</text>
+            <line x1="85" y1="55" x2="185" y2="95" stroke="#232D42" stroke-width="1.5"/>
+            <circle id="pulse1" cx="85" cy="55" r="4" fill="#2FD3C7" opacity="0"/>
+
+            <circle cx="360" cy="40" r="26" fill="#161F30" stroke="#8A93A6" stroke-width="1.5"/>
+            <text x="360" y="44" text-anchor="middle" fill="#E8ECF4" font-size="8.5" font-family="IBM Plex Mono">Bank B</text>
+            <line x1="335" y1="55" x2="235" y2="95" stroke="#232D42" stroke-width="1.5"/>
+
+            <circle cx="60" cy="180" r="26" fill="#161F30" stroke="#8A93A6" stroke-width="1.5"/>
+            <text x="60" y="184" text-anchor="middle" fill="#E8ECF4" font-size="8.5" font-family="IBM Plex Mono">NBFC C</text>
+            <line x1="85" y1="165" x2="185" y2="125" stroke="#232D42" stroke-width="1.5"/>
+
+            <circle cx="360" cy="180" r="26" fill="#161F30" stroke="#8A93A6" stroke-width="1.5"/>
+            <text x="360" y="184" text-anchor="middle" fill="#E8ECF4" font-size="8.5" font-family="IBM Plex Mono">Bank D</text>
+            <line x1="335" y1="165" x2="235" y2="125" stroke="#232D42" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Query Result</h3>
+        <div class="desc">What IDBI's onboarding system actually receives back.</div>
+        <div class="mesh-result" id="meshResult">
+          <div class="row"><span>Fingerprint hash</span><span>0x8f3a...c91e</span></div>
+          <div class="row"><span>Match found</span><span style="color:var(--red);">YES — 1 member</span></div>
+          <div class="row"><span>Flag type</span><span>Mule account pattern</span></div>
+          <div class="row"><span>Flagged</span><span>3 days ago</span></div>
+          <div class="row"><span>Source bank identity</span><span>Not disclosed</span></div>
+          <div class="row"><span>Recommended action</span><span style="color:var(--amber);">Hold + manual KYC review</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="view-trade">
+    <div class="scenario-bar">
+      <div>
+        <div class="label">SCENARIO</div>
+        <div class="title">SME submits an invoice for discounting — checking for duplicate financing</div>
+      </div>
+      <button class="btn" id="tradeBtn" onclick="runTradeSim()">▶ Check Invoice</button>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Invoice Submission</h3>
+        <div class="invoice-card">
+          <div class="row"><span>Invoice No.</span><span>INV-2026-04471</span></div>
+          <div class="row"><span>Seller</span><span>Anand Textiles Pvt Ltd</span></div>
+          <div class="row"><span>Buyer</span><span>Metro Retail Chain</span></div>
+          <div class="row"><span>Amount</span><span>₹ 18,40,000</span></div>
+          <div class="row"><span>Requested at</span><span>IDBI TReDS Desk</span></div>
+        </div>
+        <div class="desc">RakshaNet hashes seller+buyer+invoice number+amount into a single fingerprint before any money moves.</div>
+      </div>
+      <div class="card">
+        <h3>Duplicate-Financing Check</h3>
+        <div class="mesh-result" id="tradeResult">
+          <div class="row"><span>Invoice fingerprint</span><span>0x2c7d...441a</span></div>
+          <div class="row"><span>Prior match</span><span style="color:var(--red);">YES</span></div>
+          <div class="row"><span>Already discounted at</span><span>Another TReDS financier</span></div>
+          <div class="row"><span>Discounted on</span><span>2 days ago</span></div>
+          <div class="row"><span>Status</span><span style="color:var(--red);">BLOCKED — duplicate financing</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">RakshaNet demo runs entirely client-side on scripted scenarios. In production, hashing, ledger queries, and trust scoring happen server-side against IDBI's sandbox APIs and the consortium ledger. <b>No real customer data is used or stored in this prototype.</b></div>
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.onclick = ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('view-' + tab.dataset.tab).classList.add('active');
+  };
+});
+
+const timelineEl = document.getElementById('timeline');
+const gaugeArc = document.getElementById('gaugeArc');
+const gaugeScore = document.getElementById('gaugeScore');
+const gaugeStatus = document.getElementById('gaugeStatus');
+const CIRC = 283;
+
+function setGauge(score, statusText, color){
+  const offset = CIRC - (CIRC * score/100);
+  gaugeArc.style.stroke = color;
+  gaugeArc.setAttribute('stroke-dashoffset', offset);
+  gaugeScore.textContent = score;
+  gaugeScore.style.color = color;
+  gaugeStatus.textContent = statusText;
+  gaugeStatus.style.background = color + '26';
+  gaugeStatus.style.color = color;
+}
+
+function addEvent(time, text, level){
+  const colors = {ok:'#2FD3C7', warn:'#FFB020', danger:'#FF4B5C'};
+  const div = document.createElement('div');
+  div.className = 'event';
+  div.innerHTML = `<div class="t mono">${time}</div><div class="dot" style="background:${colors[level]}"></div><div class="txt">${text}</div>`;
+  timelineEl.appendChild(div);
+  timelineEl.scrollTop = timelineEl.scrollHeight;
+}
+
+const sessionSteps = [
+  {t:'00:00', text:'Customer opens IDBI app — device &amp; geo match baseline.', level:'ok', score:94, status:'NORMAL', color:'#2FD3C7'},
+  {t:'00:04', text:'Incoming call from unrecognised number begins.', level:'ok', score:90, status:'NORMAL', color:'#2FD3C7', call:'in progress'},
+  {t:'00:41', text:'Call still active — <b>41 minutes</b>, well above normal call-during-session baseline.', level:'warn', score:68, status:'ELEVATED', color:'#FFB020', call:'41 min (unusual)'},
+  {t:'00:43', text:'New payee added — never transacted with before.', level:'warn', score:52, status:'ELEVATED', color:'#FFB020', payee:'new, first-time'},
+  {t:'00:44', text:'Transfer initiated: <b>₹4,00,000</b> to the new payee, immediately after call.', level:'danger', score:29, status:'HIGH RISK', color:'#FF4B5C'},
+  {t:'00:44', text:'Pattern match: call-then-new-payee-then-urgent-transfer resembles known coercion scam signature.', level:'danger', score:18, status:'CRITICAL', color:'#FF4B5C'},
+];
+
+let sessionRunning = false;
+function runSessionSim(){
+  if(sessionRunning) return;
+  sessionRunning = true;
+  document.getElementById('startBtn').disabled = true;
+  timelineEl.innerHTML = '';
+  document.getElementById('intervention').classList.remove('show');
+  setGauge(92, 'NORMAL', '#2FD3C7');
+  document.getElementById('sigCall').textContent = 'none';
+  document.getElementById('sigPayee').textContent = 'known payees only';
+
+  sessionSteps.forEach((step, i)=>{
+    setTimeout(()=>{
+      addEvent(step.t, step.text, step.level);
+      setGauge(step.score, step.status, step.color);
+      if(step.call) document.getElementById('sigCall').textContent = step.call;
+      if(step.payee) document.getElementById('sigPayee').textContent = step.payee;
+      if(i === sessionSteps.length - 1){
+        setTimeout(()=>{
+          document.getElementById('intervention').classList.add('show');
+          sessionRunning = false;
+        }, 500);
+      }
+    }, i * 900);
+  });
+}
+function resetSession(){
+  document.getElementById('startBtn').disabled = false;
+  timelineEl.innerHTML = '';
+  document.getElementById('intervention').classList.remove('show');
+  setGauge(92, 'NORMAL', '#2FD3C7');
+  document.getElementById('sigCall').textContent = 'none';
+  document.getElementById('sigPayee').textContent = 'known payees only';
+}
+resetSession();
+
+function runMeshSim(){
+  const btn = document.getElementById('meshBtn');
+  btn.disabled = true;
+  const pulse = document.getElementById('pulse1');
+  document.getElementById('meshResult').classList.remove('show');
+  let progress = 0;
+  pulse.setAttribute('opacity', 1);
+  const anim = setInterval(()=>{
+    progress += 0.05;
+    const x = 85 + (185-85)*progress;
+    const y = 55 + (95-55)*progress;
+    pulse.setAttribute('cx', x);
+    pulse.setAttribute('cy', y);
+    if(progress >= 1){
+      clearInterval(anim);
+      pulse.setAttribute('opacity', 0);
+      setTimeout(()=>{
+        document.getElementById('meshResult').classList.add('show');
+        btn.disabled = false;
+      }, 250);
+    }
+  }, 30);
+}
+
+function runTradeSim(){
+  const btn = document.getElementById('tradeBtn');
+  btn.disabled = true;
+  document.getElementById('tradeResult').classList.remove('show');
+  setTimeout(()=>{
+    document.getElementById('tradeResult').classList.add('show');
+    btn.disabled = false;
+  }, 900);
+}
+</script>
+</body>
+</html>
