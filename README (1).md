@@ -47,7 +47,7 @@ Open `index.html` → try each of the three tabs → click the scenario button i
 - **Phase 3 — Consortium Scale (ongoing):** Onboard partner banks/NBFCs onto the shared ledger under a formal governance framework — positioning IDBI as an infrastructure anchor, similar to NPCI's role for UPI.
 
 ## Team
-[Add your name, role, and contact here]
+Arpan Ghosh, Independent AI Specialist, Contact: arpanghosh984@gmail.com, https://arpanghosh.in/ 
 
 ## License
 Built for IDBI Innovate 2026 submission purposes.
